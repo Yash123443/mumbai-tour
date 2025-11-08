@@ -1,0 +1,284 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Hotels in Mumbai</title>
+
+<!-- Google Font -->
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;500;700&display=swap" rel="stylesheet">
+<script defer src="auth.js"></script>
+    <link rel="stylesheet" href="style.css">
+<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+<link rel="stylesheet" href="global-theme.css">
+<style>
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  font-family: "Poppins", sans-serif;
+}
+
+body {
+  
+  color: #333;
+}
+
+header {
+  text-align: center;
+  padding: 30px 20px;
+ background: linear-gradient(90deg,#0077b6,#0096c7);
+  color: white;
+  box-shadow: 0 2px 6px rgba(0,0,0,0.2);
+}
+
+header h1 {
+  font-size: 2.5em;
+  margin-bottom: 10px;
+}
+
+header p {
+  font-size: 1.1em;
+}
+
+.search-filter {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 15px;
+  padding: 20px;
+  background: linear-gradient(90deg,#0077b6,#0096c7);
+}
+
+.search-filter input,
+.search-filter select {
+  padding: 10px 15px;
+  border: none;
+  border-radius: 25px;
+  outline: none;
+  font-size: 1em;
+}
+
+.search-filter input {
+  width: 250px;
+}
+
+.search-filter select {
+  background: white;
+  color: #333;
+}
+
+.category {
+  margin: 40px 0 20px;
+  text-align: center;
+  color: #004d40;
+  font-size: 1.8em;
+  font-weight: 600;
+}
+
+.hotel-container {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(270px, 1fr));
+  gap: 25px;
+  padding: 0 40px 40px;
+}
+
+.hotel-card {
+  background: white;
+  border-radius: 15px;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+  overflow: hidden;
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.hotel-card:hover {
+  transform: translateY(-8px);
+  box-shadow: 0 8px 18px rgba(0,0,0,0.2);
+}
+
+.hotel-card img {
+  width: 100%;
+  height: 180px;
+  object-fit: cover;
+}
+
+.hotel-info {
+  padding: 15px 20px;
+}
+
+.hotel-info h3 {
+  color: #004d40;
+  margin-bottom: 8px;
+}
+
+.hotel-info p {
+  font-size: 0.9em;
+  color: #555;
+  margin-bottom: 8px;
+}
+
+.rating {
+  color: #FFD700;
+  font-weight: bold;
+}
+
+.price {
+  color: #00796b;
+  font-weight: 600;
+  font-size: 1.1em;
+}
+
+button.book-btn {
+  background: #007BFF;
+  color: white;
+  border: none;
+  padding: 8px 15px;
+  border-radius: 25px;
+  cursor: pointer;
+  transition: background 0.3s ease;
+}
+
+button.book-btn:hover {
+  background: #0056b3;
+}
+h1{color: white;}
+</style>
+</head>
+
+<body>
+   <nav class="navbar navbar-expand-lg navbar-dark bg-dark sticky-top">
+    <div class="container">
+        <a class="navbar-brand" href="index.html">🏙️ Explore Mumbai</a>
+        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="navbarNav">
+            <ul class="navbar-nav ms-auto">
+                <li class="nav-item"><a class="nav-link" href="index.html">Home</a></li>
+                <li class="nav-item"><a class="nav-link" href="places.html">Places</a></li>
+                <li class="nav-item"><a class="nav-link" href="food.html">Food</a></li>
+                <li class="nav-item"><a class="nav-link" href="itinerary.html">Itinerary</a></li>
+                <li class="nav-item"><a class="nav-link" href="hotel.html">Hotel</a></li>
+                <li class="nav-item"><a class="nav-link" href="weather.html">Weather</a></li>
+                <li class="nav-item"><a class="nav-link" href="feedback.html">Reviews</a></li>
+                
+                <li class="nav-item">
+                    <a id="dynamic-auth-button" class="nav-link btn btn-primary text-white ms-lg-2" href="login.html">Login</a>
+                </li>
+            </ul>
+        </div>
+    </div>
+</nav>
+
+<header>
+  <h1>Hotels in Mumbai</h1>
+  <p>Find your perfect stay — from luxury to budget-friendly!</p>
+</header>
+
+<div class="search-filter">
+  <input type="text" id="searchInput" placeholder="Search hotels...">
+  <select id="categoryFilter">
+    <option value="all">All Categories</option>
+    <option value="Luxury">Luxury</option>
+    <option value="Business">Business</option>
+    <option value="Budget">Budget/Student</option>
+    <option value="Boutique">Boutique</option>
+  </select>
+  <select id="daysFilter">
+    <option value="1">1 Day</option>
+    <option value="2">2 Days</option>
+    <option value="3">3 Days</option>
+    <option value="4">4 Days</option>
+    <option value="5">5 Days</option>
+  </select>
+</div>
+
+<div id="hotelSection"></div>
+<script>
+const hotels = [
+  // 🌟 LUXURY HOTELS
+  { name: "The Taj Mahal Palace", image: "The Taj Mahal Palace.jpg", desc: "Iconic luxury hotel overlooking Gateway of India.", rating: 5, price: "₹18,000/night", category: "Luxury" },
+  { name: "The Oberoi Mumbai", image: "The Oberoi Mumbai.jpg", desc: "Sea-facing luxury with elegant interiors.", rating: 5, price: "₹16,000/night", category: "Luxury" },
+  { name: "ITC Grand Central", image: "ITC Grand Central.jpg", desc: "Heritage-inspired 5-star hotel in Parel.", rating: 5, price: "₹14,000/night", category: "Luxury" },
+  { name: "JW Marriott Juhu", image: "JW Marriott Juhu.jpg", desc: "Beachside luxury hotel with ocean views.", rating: 5, price: "₹17,500/night", category: "Luxury" },
+  { name: "St. Regis Mumbai", image: "St. Regis Mumbai.jpg", desc: "Elegant luxury in Lower Parel.", rating: 5, price: "₹19,000/night", category: "Luxury" },
+  { name: "Four Seasons Hotel Mumbai", image: "Four Seasons Hotel Mumbai.jpg", desc: "Modern 5-star comfort with skyline views.", rating: 5, price: "₹15,500/night", category: "Luxury" },
+
+  // 💼 BUSINESS HOTELS
+  { name: "Trident Nariman Point", image: "Trident Nariman Point.jpg", desc: "Stylish business hotel near Marine Drive.", rating: 4, price: "₹12,000/night", category: "Business" },
+  { name: "Sofitel BKC", image: "Sofitel BKC.jpg", desc: "French elegance in Bandra Kurla Complex.", rating: 5, price: "₹13,000/night", category: "Business" },
+  { name: "The Lalit Mumbai", image: "The Lalit Mumbai.jpg", desc: "Close to airport, ideal for business travelers.", rating: 4, price: "₹10,500/night", category: "Business" },
+  { name: "The Orchid Hotel", image: "The Orchid Hotel.jpg", desc: "Eco-friendly hotel near airport.", rating: 4, price: "₹8,000/night", category: "Business" },
+  { name: "Holiday Inn Mumbai Intl Airport", image: "Holiday Inn Mumbai Intl Airport.jpg", desc: "Modern business hotel with rooftop pool.", rating: 4, price: "₹9,000/night", category: "Business" },
+  { name: "Renaissance Mumbai", image: "Renaissance Mumbai.jpg", desc: "Lakeside luxury and business amenities.", rating: 5, price: "₹13,500/night", category: "Business" },
+  
+  // 🎒 BUDGET HOTELS
+  { name: "Hotel City Palace", image: "Hotel City Palace.jpg", desc: "Affordable stay near CST station.", rating: 3, price: "₹2,000/night", category: "Budget" },
+  { name: "Residency Hotel Fort", image: "Residency Hotel Fort.jpg", desc: "Comfortable mid-range hotel in Fort.", rating: 3, price: "₹5,000/night", category: "Budget" },
+  { name: "YMCA International House", image: "YMCA International House.jpg", desc: "Student-friendly budget stay in Mumbai Central.", rating: 3, price: "₹1,800/night", category: "Budget" },
+  { name: "Hotel Supreme", image: "Hotel Supreme.jpg", desc: "Budget hotel near Colaba Causeway.", rating: 3, price: "₹3,200/night", category: "Budget" },
+  { name: "Hotel Suba Palace", image: "Hotel Suba Palace.jpg", desc: "Affordable comfort near Gateway of India.", rating: 3, price: "₹4,000/night", category: "Budget" },
+  { name: "Hotel Broadway Colaba", image: "Hotel Broadway Colaba.jpg", desc: "Budget-friendly option in South Mumbai.", rating: 3, price: "₹2,800/night", category: "Budget" },
+
+  // 🏡 BOUTIQUE HOTELS
+  { name: "Abode Bombay", image: "Abode Bombay.jpg", desc: "Charming boutique stay in Colaba.", rating: 4, price: "₹7,500/night", category: "Boutique" },
+  { name: "Le Sutra Hotel", image: "Le Sutra Hotel.jpg", desc: "Art-themed boutique stay in Bandra.", rating: 4, price: "₹8,200/night", category: "Boutique" },
+  { name: "The Gordon House Hotel", image: "The Gordon House Hotel.jpg", desc: "Unique stay near Gateway of India.", rating: 4, price: "₹7,800/night", category: "Boutique" },
+  { name: "T24 Residency", image: "T24 Residency.jpg", desc: "Stylish airport boutique hotel.", rating: 4, price: "₹6,500/night", category: "Boutique" },
+  { name: "Hotel Marine Plaza", image: "Hotel Marine Plaza.jpg", desc: "Seafront boutique with rooftop pool.", rating: 4, price: "₹9,000/night", category: "Boutique" }
+];
+
+function displayHotels(list) {
+  const section = document.getElementById("hotelSection");
+  section.innerHTML = "";
+  const selectedDays = document.getElementById("daysFilter").value;
+
+  const categories = ["Luxury", "Business", "Budget", "Boutique"];
+  categories.forEach(cat => {
+    const catHotels = list.filter(h => h.category === cat);
+    if (catHotels.length > 0) {
+      section.innerHTML += `<h2 class='category'>${cat} Hotels</h2>`;
+      const cards = catHotels.map(hotel => `
+        <div class="hotel-card">
+          <img src="${hotel.image}" alt="${hotel.name}">
+          <div class="hotel-info">
+            <h3>${hotel.name}</h3>
+            <p>${hotel.desc}</p>
+            <p class="rating">⭐ ${hotel.rating} Star</p>
+            <p class="price">${hotel.price}</p>
+            <a href="hotelbook.html?hotel=${encodeURIComponent(hotel.name)}&days=${selectedDays}">
+              <button class="book-btn">Book for ${selectedDays} Day${selectedDays > 1 ? 's' : ''}</button>
+            </a>
+          </div>
+        </div>
+      `).join("");
+      section.innerHTML += `<div class='hotel-container'>${cards}</div>`;
+    }
+  });
+}
+
+function filterHotels() {
+  const searchValue = document.getElementById("searchInput").value.toLowerCase();
+  const categoryValue = document.getElementById("categoryFilter").value;
+  let filtered = hotels.filter(h => h.name.toLowerCase().includes(searchValue));
+  if (categoryValue !== "all") {
+    filtered = filtered.filter(h => h.category === categoryValue);
+  }
+  displayHotels(filtered);
+}
+
+document.getElementById("searchInput").addEventListener("input", filterHotels);
+document.getElementById("categoryFilter").addEventListener("change", filterHotels);
+document.getElementById("daysFilter").addEventListener("change", filterHotels);
+
+// Initial Display
+displayHotels(hotels);
+</script>
+   <footer class="bg-dark text-white text-center py-4">
+        <p class="mb-0">© 2025 Explore Mumbai | All Rights Reserved</p>
+    </footer>
+
+
+
+</body>
+</html>

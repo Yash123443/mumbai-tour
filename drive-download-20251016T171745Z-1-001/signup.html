@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Sign Up - Explore Mumbai</title>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+  <script defer src="auth.js"></script>
+  <link rel="stylesheet" href="global-theme.css">
+  
+  <style>
+    /* Import Google Font used in the 'Explore Mumbai' site */
+    @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700&display=swap');
+
+    body {
+        font-family: 'Poppins', sans-serif;
+        background-color: #79a2cc; /* Light gray background from target site */
+        display: flex;
+        flex-direction: column;
+        min-height: 100vh;
+        margin: 0;
+    }
+
+    main {
+        /* This makes the card center vertically */
+        flex: 1;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        padding: 20px;
+    }
+
+    /* The main container for the form */
+    .auth-card {
+        background: white;
+        padding: 40px;
+        border-radius: 15px;
+        box-shadow: 0 6px 20px rgba(0, 0, 0, 0.1);
+        width: 100%;
+        max-width: 450px;
+        text-align: center;
+    }
+
+    .auth-card h2 {
+        font-weight: 700;
+        color: #343a40;
+        margin-bottom: 25px;
+    }
+
+    .auth-card p {
+        margin-top: 20px;
+        color: #6c757d;
+    }
+
+    /* Styling for the link to switch between login/signup */
+    .auth-card a {
+        color: #0d6efd; /* Bootstrap's primary blue */
+        text-decoration: none;
+        font-weight: 600;
+    }
+
+    .auth-card a:hover {
+        text-decoration: underline;
+    }
+
+    /* Styling for the main button */
+    .btn-primary {
+        padding: 12px 15px;
+        font-size: 1rem;
+        font-weight: 600;
+    }
+  </style>
+</head>
+<body>
+
+   <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+    <div class="container">
+        <a class="navbar-brand" href="index.html">🏙️ Explore Mumbai</a>
+    </div>
+</nav>
+  <main>
+    <div class="auth-card">
+      <h2>🖥️ Create an Account</h2>
+      <form onsubmit="signup(); return false;">
+        <div class="form-floating mb-3">
+          <input type="text" class="form-control" id="signupUsername" placeholder="Create username" required>
+          <label for="signupUsername">Create Username</label>
+        </div>
+        <div class="form-floating mb-4">
+          <input type="password" class="form-control" id="signupPassword" placeholder="Create password" required>
+          <label for="signupPassword">Create Password</label>
+        </div>
+        <button type="submit" class="btn btn-primary w-100">Sign Up</button>
+      </form>
+      <p>Already have an account? <a href="login.html">Login</a></p>
+    </div>
+  </main>
+
+  <footer class="bg-dark text-white text-center py-4">
+    <p class="mb-0">© 2025 Explore Mumbai | All Rights Reserved</p>
+  </footer>
+
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>

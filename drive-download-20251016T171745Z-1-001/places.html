@@ -1,0 +1,293 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Iconic Places in Mumbai</title>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css">
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap" rel="stylesheet">
+<script defer src="auth.js"></script>
+    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="global-theme.css">
+
+<style>
+body {
+  font-family: 'Poppins', sans-serif;
+ 
+}
+h2 {
+  background-image: url('Mumbai.jpg');
+}
+
+
+.page-header {
+  background-size: cover;
+  background-position: center;
+  color: white;
+  text-align: center;
+  padding: 100px 20px;
+}
+
+.page-header h1 {
+  font-weight: 700;
+  font-size: 3rem;
+  
+}
+
+.content-section {
+  padding: 40px 0;
+}
+
+.section-title {
+  text-align: center;
+  font-weight: 700;
+  margin-bottom: 30px;
+}
+
+.place-card {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  background: white;
+  border-radius: 12px;
+  border: 2px solid #e0e0e0;
+  box-shadow: 0 2px 10px rgba(0,0,0,0.08);
+  margin-bottom: 20px;
+  overflow: hidden;
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+  cursor: pointer;
+}
+
+.place-card.reverse {
+  flex-direction: row-reverse;
+}
+
+.place-card:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 6px 18px rgba(0,0,0,0.12);
+}
+
+.place-image {
+  width: 45%;
+  height: 250px;
+  object-fit: cover;
+}
+
+.place-content {
+  padding: 25px;
+  width: 55%;
+}
+
+.place-name {
+  font-size: 1.6rem;
+  font-weight: 600;
+}
+
+.place-info {
+  margin-top: 10px;
+  color: #555;
+}
+
+.scroll-container {
+  max-height: 80vh;
+  overflow-y: auto;
+  padding-right: 10px;
+  margin-top: 0 !important;
+}
+
+.btn-group .btn {
+  border-radius: 0 !important;
+}
+
+.btn-group .btn:first-child {
+  border-top-left-radius: 12px !important;
+  border-bottom-left-radius: 12px !important;
+}
+
+.btn-group .btn:last-child {
+  border-top-right-radius: 12px !important;
+  border-bottom-right-radius: 12px !important;
+}
+
+.suggest-section {
+  background: #f8f9fa;
+  border-radius: 15px;
+  padding: 30px;
+  margin-top: 40px;
+  box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+}
+
+footer {
+  margin-top: 40px;
+}
+
+@media (max-width: 768px) {
+  .place-card, .place-card.reverse {
+    flex-direction: column;
+  }
+  .place-image {
+    width: 100%;
+    height: 200px;
+  }
+  .place-content {
+    width: 100%;
+  }
+}
+</style>
+</head>
+<body>
+
+ <nav class="navbar navbar-expand-lg navbar-dark bg-dark sticky-top">
+    <div class="container">
+        <a class="navbar-brand" href="index.html">🏙️ Explore Mumbai</a>
+        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="navbarNav">
+            <ul class="navbar-nav ms-auto">
+                <li class="nav-item"><a class="nav-link" href="index.html">Home</a></li>
+                <li class="nav-item"><a class="nav-link" href="places.html">Places</a></li>
+                <li class="nav-item"><a class="nav-link" href="food.html">Food</a></li>
+                <li class="nav-item"><a class="nav-link" href="itinerary.html">Itinerary</a></li>
+                <li class="nav-item"><a class="nav-link" href="hotel.html">Hotel</a></li>
+                <li class="nav-item"><a class="nav-link" href="weather.html">Weather</a></li>
+                <li class="nav-item"><a class="nav-link" href="feedback.html">Reviews</a></li>
+                
+                <li class="nav-item">
+                    <a id="dynamic-auth-button" class="nav-link btn btn-primary text-white ms-lg-2" href="login.html">Login</a>
+                </li>
+            </ul>
+        </div>
+    </div>
+</nav>
+
+<header class="page-header" style="background-image: linear-gradient(rgba(0,0,0,0.4), rgba(0,0,0,0.4)), url('Places Taskbar2.jpg');">
+  <h1  >Iconic Places of Mumbai</h1>
+</header>
+
+<main class="container content-section">
+  <h2 class="section-title mb-3">Discover Mumbai's Landmarks</h2>
+
+  <div class="btn-group w-100 mb-2" role="group" aria-label="Category Filter">
+    <button type="button" class="btn btn-primary active" onclick="filterPlaces('all')">All</button>
+    <button type="button" class="btn btn-primary" onclick="filterPlaces('fun')">Fun & Travel</button>
+    <button type="button" class="btn btn-primary" onclick="filterPlaces('shopping')">Shopping</button>
+    <button type="button" class="btn btn-primary" onclick="filterPlaces('culture')">Culture</button>
+  </div>
+
+  <div class="scroll-container mt-0" id="places-container"></div>
+
+  <section class="suggest-section">
+    <h3 class="text-center mb-3">🌍 Suggest a Place to Add</h3>
+    <form id="suggest-form">
+      <div class="mb-3">
+        <label for="placeName" class="form-label">Place Name</label>
+        <input type="text" class="form-control" id="placeName" required>
+      </div>
+      <div class="mb-3">
+        <label for="placeLocation" class="form-label">Location</label>
+        <input type="text" class="form-control" id="placeLocation" required>
+      </div>
+      <div class="mb-3">
+        <label for="placeInfo" class="form-label">Description</label>
+        <textarea class="form-control" id="placeInfo" rows="3" required></textarea>
+      </div>
+      <button type="submit" class="btn btn-success w-100">Submit Suggestion</button>
+    </form>
+  </section>
+</main>
+
+<footer class="bg-dark text-white text-center py-4">
+  <p class="mb-0">© 2025 Explore Mumbai | All Rights Reserved</p>
+</footer>
+
+<script>
+// --- PLACE DATA ---
+const places = [
+  // FUN & TRAVEL
+  { name: "Gateway of India", category: "fun", image: "Gateway.jpeg", info: "Iconic arch monument overlooking the Arabian Sea." },
+  { name: "Marine Drive", category: "fun", image: "Marinedrive.jpeg", info: "Beautiful promenade famous for sunsets." },
+  { name: "Juhu Beach", category: "fun", image: "juhu.jpeg", info: "Popular beach known for food stalls and Bollywood celebrities." },
+  { name: "Sanjay Gandhi National Park", category: "fun", image: "sanjay.jpeg", info: "Nature trails and wildlife in the heart of the city." },
+  { name: "EsselWorld", category: "fun", image: "essel.jpeg", info: "Mumbai’s biggest amusement park with fun rides." },
+  { name: "Powai Lake", category: "fun", image: "powai.jpeg", info: "Scenic artificial lake surrounded by greenery." },
+  { name: "Versova Beach", category: "fun", image: "versova.jpeg", info: "Quieter beach popular for photography and seafood." },
+  { name: "Aksa Beach", category: "fun", image: "aksa.jpeg", info: "Peaceful beach ideal for relaxing weekends." },
+  { name: "Hanging Gardens", category: "fun", image: "hanging.jpeg", info: "Terraced gardens with city views." },
+  { name: "Taraporewala Aquarium", category: "fun", image: "Taraporewala.jpeg", info: "One of India’s oldest aquariums." },
+
+  // SHOPPING
+  { name: "Colaba Causeway", category: "shopping", image: "colaba.jpeg", info: "Vibrant street shopping for souvenirs and fashion." },
+  { name: "Chor Bazaar", category: "shopping", image: "chor.jpeg", info: "Famous flea market for antiques and vintage items." },
+  { name: "Linking Road", category: "shopping", image: "linking.jpeg", info: "Trendy street market for clothes and accessories." },
+  { name: "Phoenix Marketcity", category: "shopping", image: "pheonix marketcity.jpeg", info: "Large mall with international brands." },
+  { name: "High Street Phoenix", category: "shopping", image: "High Street Phoenix.jpeg", info: "Upscale shopping mall in Lower Parel." },
+  { name: "Fashion Street", category: "shopping", image: "Fashion Street.jpeg", info: "Budget fashion shopping for clothes and shoes." },
+  { name: "Inorbit Mall", category: "shopping", image: "Inorbit Mall.jpeg", info: "Popular mall with dining and entertainment." },
+  { name: "Zaveri Bazaar", category: "shopping", image: "Zaveri Bazaar.jpeg", info: "Famous jewelry market in Mumbai." },
+  { name: "Crawford Market", category: "shopping", image: "Crawford Market.jpeg", info: "Historic market selling fruits, vegetables & spices." },
+  { name: "R City Mall", category: "shopping", image: "R City Mall.jpeg", info: "Shopping complex with retail, food, and cinema." },
+
+  // CULTURE
+  { name: "Chhatrapati Shivaji Maharaj Terminus", category: "culture", image: "Chhatrapati Shivaji Maharaj Terminus.jpeg", info: "UNESCO heritage railway station with Victorian architecture." },
+  { name: "Siddhivinayak Temple", category: "culture", image: "Siddhivinayak Temple.jpeg", info: "Famous Hindu temple dedicated to Lord Ganesha." },
+  { name: "Haji Ali Dargah", category: "culture", image: "Haji Ali Dargah.jpeg", info: "Iconic mosque and tomb on a small islet." },
+  { name: "Elephanta Caves", category: "culture", image: "Elephanta Caves.jpeg", info: "Rock-cut temples with ancient sculptures." },
+  { name: "Prince of Wales Museum", category: "culture", image: "Prince of Wales Museum.jpeg", info: "Museum showcasing history, art, and culture." },
+  { name: "Banganga Tank", category: "culture", image: "Banganga Tank.jpeg", info: "Ancient water tank and temple complex." },
+  { name: "Global Vipassana Pagoda", category: "culture", image: "Global Vipassana Pagoda.jpeg", info: "Massive meditation hall with cultural significance." },
+  { name: "Jehangir Art Gallery", category: "culture", image: "Jehangir Art Gallery.jpeg", info: "Prominent art gallery exhibiting contemporary art." },
+  { name: "Dr. Bhau Daji Lad Museum", category: "culture", image: "Dr. Bhau Daji Lad Museum.jpeg", info: "Mumbai’s oldest museum showcasing city heritage." },
+  { name: "Mount Mary Church", category: "culture", image: "Mount Mary Church.jpeg", info: "Historic Roman Catholic basilica in Bandra." }
+];
+
+// --- RENDER FUNCTION ---
+const container = document.getElementById('places-container');
+
+function renderPlaces(list) {
+  container.innerHTML = '';
+  list.forEach((place, index) => {
+    const card = document.createElement('div');
+    card.className = `place-card ${index % 2 === 1 ? 'reverse' : ''}`;
+    card.innerHTML = `
+      <img src="${place.image}" alt="${place.name}" class="place-image">
+      <div class="place-content">
+        <h4 class="place-name">${place.name}</h4>
+        <p class="place-info">${place.info}</p>
+      </div>
+    `;
+    container.appendChild(card);
+  });
+}
+
+// --- FILTER FUNCTION ---
+function filterPlaces(category) {
+  const buttons = document.querySelectorAll('.btn-group .btn');
+  buttons.forEach(btn => btn.classList.remove('active'));
+  event.target.classList.add('active');
+
+  if(category === 'all') renderPlaces(places);
+  else renderPlaces(places.filter(p => p.category === category));
+}
+
+// --- INITIAL RENDER ---
+renderPlaces(places);
+
+// --- SUGGEST FORM ---
+document.getElementById('suggest-form').addEventListener('submit', function(e){
+  e.preventDefault();
+  const name = document.getElementById('placeName').value;
+  const location = document.getElementById('placeLocation').value;
+  const info = document.getElementById('placeInfo').value;
+
+  const newPlace = { name, category: 'suggested', image: 'https://via.placeholder.com/400x250', info };
+  places.push(newPlace);
+  renderPlaces(places);
+  this.reset();
+  alert('Thank you for your suggestion!');
+});
+</script>
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>

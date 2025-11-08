@@ -1,0 +1,281 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Mumbai Itinerary Plans</title>
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;500;700&display=swap" rel="stylesheet">
+<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+<script defer src="auth.js"></script>
+<link rel="stylesheet" href="style.css">
+<link rel="stylesheet" href="global-theme.css">
+
+<style>
+body { font-family: 'Poppins', sans-serif; margin:0; color:#222; }
+header { background: linear-gradient(90deg,#0077b6,#0096c7); color:white; text-align:center; padding:2rem 1rem; }
+section { padding:2rem; max-width:1200px; margin:auto; }
+h2 { color:#005f87; margin-bottom:1rem; }
+h1{color: white;}
+
+.list { display:flex; flex-direction:column; gap:1.5rem; }
+.card { display: flex; flex-direction: row; background:white; border-radius:12px; box-shadow:0 4px 10px rgba(0,0,0,0.1); overflow:hidden; transition:0.2s; }
+.card:hover { transform:scale(1.02); }
+.card img { width:40%; height:auto; object-fit:cover; }
+.card-content { flex:1; padding:1rem 1.2rem; display:flex; flex-direction:column; justify-content:center; }
+.days-badge { background:#ffd166; color:#333; padding:0.3rem 0.8rem; border-radius:20px; font-weight:600; font-size:0.9rem; margin-left:10px; }
+button, .btn { background:#0077b6 !important; border:none; color:white; padding:0.7rem 1.2rem; border-radius:8px; cursor:pointer; font-size:1rem; margin-top:10px; transition: background 0.2s; text-decoration:none; display:inline-block; }
+button:hover, .btn:hover { background:#005f87 !important; color:white; }
+.select-hotel { margin-top:5px; padding:5px; border-radius:6px; border:1px solid #ccc; width:220px; }
+.total-price { font-weight:bold; color:#0096c7; margin-top:8px; }
+.location-list { list-style:none; padding:0; margin:8px 0 0 0; }
+.location-list li { background:#e0f0ff; padding:6px 12px; border-radius:20px; font-size:0.9rem; margin-bottom:6px; }
+.book-btn { margin-top:10px; }
+@media (max-width:768px){
+  .card { flex-direction: column; }
+  .card img { width:100%; height:220px; }
+}
+</style>
+</head>
+<body>
+
+<nav class="navbar navbar-expand-lg navbar-dark bg-dark sticky-top">
+    <div class="container">
+        <a class="navbar-brand" href="index.html">🏙️ Explore Mumbai</a>
+        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="navbarNav">
+            <ul class="navbar-nav ms-auto">
+                <li class="nav-item"><a class="nav-link" href="index.html">Home</a></li>
+                <li class="nav-item"><a class="nav-link" href="places.html">Places</a></li>
+                <li class="nav-item"><a class="nav-link" href="food.html">Food</a></li>
+                <li class="nav-item"><a class="nav-link" href="itinerary.html">Itinerary</a></li>
+                <li class="nav-item"><a class="nav-link" href="hotel.html">Hotel</a></li>
+                <li class="nav-item"><a class="nav-link" href="weather.html">Weather</a></li>
+                <li class="nav-item"><a class="nav-link" href="feedback.html">Reviews</a></li>
+                
+                <li class="nav-item">
+                    <a id="dynamic-auth-button" class="nav-link  btn-primary text-white ms-lg-2" href="login.html">Login</a>
+                </li>
+            </ul>
+        </div>
+    </div>
+</nav>
+
+<header>
+  <h1 >Explore Mumbai - Itinerary Plans</h1>
+  <p>Choose from curated plans or generate your own personalized experience!</p>
+</header>
+
+<section>
+  <h2>🌆 Default Itineraries</h2>
+  <div id="defaultPlans" class="list"></div>
+</section>
+
+<section>
+  <h2>✨ Create Your Own Itinerary</h2>
+  <form id="customForm">
+    <p>Select your interests:</p>
+    <label><input type="checkbox" value="Culture & Heritage"> Culture & Heritage</label>
+    <label><input type="checkbox" value="Food & Markets"> Food & Markets</label>
+    <label><input type="checkbox" value="Beaches & Relaxation"> Beaches & Relaxation</label>
+    <label><input type="checkbox" value="Shopping"> Shopping</label>
+    <label><input type="checkbox" value="Adventure"> Adventure</label>
+    <label><input type="checkbox" value="Nature & Parks"> Nature & Parks</label>
+    <br><br>
+    <label>Number of Days (max 3):</label>
+    <select id="customDays" class="select-hotel">
+      <option value="1">1 Day</option>
+      <option value="2" selected>2 Days</option>
+      <option value="3">3 Days</option>
+    </select>
+    <br><br>
+    <p>Select hotel preference:</p>
+    <select id="customHotelStar" class="select-hotel">
+      <option value="3">3★ Hotels</option>
+      <option value="4">4★ Hotels</option>
+      <option value="5">5★ Hotels</option>
+    </select>
+    <br><br>
+    <button type="submit">Generate Itinerary</button>
+  </form>
+  <div id="generatedItinerary" class="list"></div>
+</section>
+   <footer class="bg-dark text-white text-center py-4">
+        <p class="mb-0">© 2025 Explore Mumbai | All Rights Reserved</p>
+    </footer>
+
+
+<script>
+// Default Itineraries
+const itineraries = [
+  {
+    name: "1-Day Mumbai Quick Tour",
+    days: [{ day:"Day 1", places:["Gateway of India","Colaba Causeway","Leopold Cafe (Lunch)","Marine Drive"] }],
+    basePrice: 3000,
+    hotels: {}
+  },
+  {
+    name: "2-Day Mumbai Highlights",
+    days: [
+      { day:"Day 1", places:["Gateway of India","Colaba Causeway","Leopold Cafe (Lunch)","Marine Drive","Stay at selected hotel"] },
+      { day:"Day 2", places:["Juhu Beach","Siddhivinayak Temple","Cafe Mondegar (Lunch)","Haji Ali Dargah"] }
+    ],
+    basePrice: 5000,
+    hotels: {3:[{name:"Hotel Suba Palace", price:4000}],4:[{name:"Abode Bombay", price:6000}],5:[{name:"The Taj Mahal Palace", price:12000}]}
+  },
+  {
+    name: "3-Day Cultural Mumbai",
+    days: [
+      { day:"Day 1", places:["Elephanta Caves","Kala Ghoda","Cafe Zoe (Lunch)","Prince of Wales Museum","Stay at selected hotel"] },
+      { day:"Day 2", places:["Banganga Tank","Mount Mary Church","Leopold Cafe (Lunch)","Crawford Market","Stay at selected hotel"] },
+      { day:"Day 3", places:["Chhatrapati Shivaji Maharaj Vastu Sangrahalaya","Heritage Walks"] }
+    ],
+    basePrice: 7000,
+    hotels: {3:[{name:"Hotel Suba Palace", price:3800}],4:[{name:"Abode Bombay", price:6000}],5:[{name:"Taj Mahal Tower", price:12500}]}
+  },
+  {
+    name: "3-Day Foodie Mumbai",
+    days: [
+      { day:"Day 1", places:["Crawford Market","Khau Galli","Leopold Cafe (Lunch)","Bademiya","Stay at selected hotel"] },
+      { day:"Day 2", places:["Juhu Beach Snacks","Chor Bazaar Food Walk","Cafe Zoe (Lunch)","Marine Drive","Stay at selected hotel"] },
+      { day:"Day 3", places:["Marine Drive","Colaba Market"] }
+    ],
+    basePrice: 7500,
+    hotels: {3:[{name:"Hotel Suba Palace", price:4000}],4:[{name:"Abode Bombay", price:6000}],5:[{name:"The Taj Mahal Palace", price:12000}]}
+  }
+];
+
+// Render Default
+const container = document.getElementById("defaultPlans");
+itineraries.forEach((plan,i)=>{
+  const card = document.createElement('div'); 
+  card.className='card';
+  let html = `
+    <img src="Places Taskbar.jpg" alt="${plan.name}">
+    <div class="card-content">
+      <h3>${plan.name} <span class="days-badge">${plan.days.length} Days</span></h3>
+      <ul class="location-list">
+        ${plan.days.map(d=>`<li><strong>${d.day}:</strong> ${d.places.join(' → ')}</li>`).join('')}
+      </ul>
+      <div class="total-price" id="totalPrice${i}">Price: ₹${plan.basePrice}</div>`;
+
+  if(plan.days.length > 1){
+    html += `
+      <label>Select Hotel:</label>
+      <select class="select-hotel" id="hotelSelect${i}">
+        <option value="">--Select--</option>
+        ${[3,4,5].map(star=>plan.hotels[star]?.map(h=>`<option value="${star}-${h.name}-${h.price}">${star}★ ${h.name} - ₹${h.price}</option>`).join('')).join('')}
+      </select>`;
+  }
+  html += `<a id="bookBtn${i}" href="book.html?plan=${encodeURIComponent(plan.name)}&price=${plan.basePrice}" class="btn book-btn">Book Now</a></div>`;
+  card.innerHTML = html;
+  container.appendChild(card);
+
+  if(plan.days.length > 1){
+    const hotelSelect = document.getElementById(`hotelSelect${i}`);
+    const totalPriceDiv = document.getElementById(`totalPrice${i}`);
+    const bookBtn = document.getElementById(`bookBtn${i}`);
+    hotelSelect.addEventListener('change', e=>{
+      const val = e.target.value;
+      let total = plan.basePrice;
+      let hotelName = '';
+      if(val){
+        const parts = val.split('-');
+        hotelName = parts[1];
+        total += parseInt(parts[2]);
+      }
+      totalPriceDiv.textContent = hotelName ? `Itinerary + ${hotelName}: ₹${total}` : `Price: ₹${total}`;
+      bookBtn.href = `book.html?plan=${encodeURIComponent(plan.name)}&hotel=${encodeURIComponent(hotelName)}&price=${total}`;
+    });
+  }
+});
+
+// Custom Itinerary
+document.getElementById("customForm").addEventListener("submit", e=>{
+  e.preventDefault();
+  const selectedInterests = Array.from(document.querySelectorAll('input[type="checkbox"]:checked')).map(c=>c.value);
+  if(!selectedInterests.length){alert("Select at least one interest!"); return;}
+  
+  let numDays = parseInt(document.getElementById("customDays").value);
+  if(numDays>3) numDays = 3;
+  
+  const hotelStar = document.getElementById("customHotelStar").value;
+  
+  // Base price based on interests
+  let basePrice = 5000;
+  if(selectedInterests.includes("Culture & Heritage")) basePrice = 7000;
+  else if(selectedInterests.includes("Beaches & Relaxation")) basePrice = 4500;
+
+  // Places selection
+  let allPlaces = [];
+  if(selectedInterests.includes("Culture & Heritage")) 
+    allPlaces = ["Elephanta Caves","Kala Ghoda","Prince of Wales Museum","Banganga Tank","Mount Mary Church","Heritage Walks"];
+  else if(selectedInterests.includes("Beaches & Relaxation")) 
+    allPlaces = ["Chowpatty","Carter Road","Juhu Beach","Marine Drive","Colaba Market"];
+  else 
+    allPlaces = ["Gateway of India","Marine Drive","Local Market","Siddhivinayak Temple"];
+
+  const cafes = ["Leopold Cafe","Cafe Mondegar","Cafe Zoe"];
+  const perDay = Math.ceil(allPlaces.length/numDays);
+  const daysArr = [];
+  for(let i=0;i<numDays;i++){
+    let dayPlaces = allPlaces.slice(i*perDay, (i+1)*perDay);
+    if(dayPlaces.length>1) dayPlaces.splice(Math.floor(dayPlaces.length/2),0,cafes[i%cafes.length]+" (Lunch)");
+    if(i<numDays-1) dayPlaces.push("Stay at selected hotel");
+    daysArr.push({day:`Day ${i+1}`, places: dayPlaces});
+  }
+
+  // Hotels by star
+  const hotelsByStar = {
+    "3": [{name:"Hotel Suba Palace", price:4000},{name:"Bawa Continental", price:3600}],
+    "4": [{name:"Abode Bombay", price:6000},{name:"Residency Hotel", price:5500}],
+    "5": [{name:"Taj Mahal Tower", price:12500},{name:"JW Marriott Juhu", price:11000}]
+  };
+
+  const hotelOptions = hotelsByStar[hotelStar] || [];
+
+  // Render
+  const itineraryDiv = document.getElementById("generatedItinerary");
+  itineraryDiv.innerHTML = `
+    <div class="card">
+      <img src="Places Taskbar.jpg" alt="Custom Itinerary">
+      <div class="card-content">
+        <h3>Custom Itinerary <span class="days-badge">${numDays} Days</span></h3>
+        <ul class="location-list">
+          ${daysArr.map(d=>`<li><strong>${d.day}:</strong> ${d.places.join(' → ')}</li>`).join('')}
+        </ul>
+        <div class="total-price" id="customTotalPrice">Price: ₹${basePrice}</div>
+        ${numDays>1 ? `
+        <label>Select Hotel:</label>
+        <select class="select-hotel" id="customHotelSelect">
+          <option value="">--Select--</option>
+          ${hotelOptions.map(h=>`<option value="${h.name}||${h.price}">${hotelStar}★ ${h.name} - ₹${h.price}</option>`).join('')}
+        </select>` : ""}
+        <a id="customBookBtn" href="book.html?plan=Custom Itinerary&price=${basePrice}" class="btn book-btn">Book Now</a>
+      </div>
+    </div>
+  `;
+
+  // Price update on hotel selection
+  if(numDays > 1){
+    const hotelSelect = document.getElementById("customHotelSelect");
+    const totalPriceDiv = document.getElementById("customTotalPrice");
+    const bookBtn = document.getElementById("customBookBtn");
+    hotelSelect.addEventListener('change', e=>{
+      const val = e.target.value;
+      let total = basePrice;
+      let hotelName = '';
+      if(val){
+        const parts = val.split('||');
+        hotelName = parts[0];
+        total += parseInt(parts[1]);
+      }
+      totalPriceDiv.textContent = hotelName ? `Itinerary + ${hotelName}: ₹${total}` : `Price: ₹${total}`;
+      bookBtn.href = `book.html?plan=${encodeURIComponent("Custom Itinerary")}&hotel=${encodeURIComponent(hotelName)}&price=${total}`;
+    });
+  }
+});
+</script>
+</body>
+</html>

@@ -1,0 +1,381 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Mumbai Tourism - Feedback & Reviews</title>
+<script src="https://unpkg.com/react@18/umd/react.development.js"></script>
+<script src="https://unpkg.com/react-dom@18/umd/react-dom.development.js"></script>
+<script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+<script defer src="auth.js"></script>
+<link rel="stylesheet" href="style.css">
+<link rel="stylesheet" href="global-theme.css">
+
+<style>
+body { 
+  font-family: 'Poppins', sans-serif; 
+ 
+  margin:0; 
+  padding:0;
+}
+
+header { 
+  background:#0077b6; 
+  color:white; 
+  padding:18px; 
+  text-align:center; 
+  font-size:24px; 
+  font-weight:600; 
+}
+
+.container1 { 
+  max-width:1100px; 
+  margin:auto; 
+  padding:15px; 
+}
+
+h2 { 
+  color:#023e8a; 
+  margin:20px 0 10px 0; 
+  font-size:20px; 
+}
+
+.table-container1, .form-container1 { 
+  background:white; 
+  padding:15px; 
+  border-radius:12px; 
+  margin-top:15px; 
+  box-shadow:0 4px 12px rgba(0,0,0,0.1);
+}
+
+.flex { 
+  display:flex; 
+  gap:15px; 
+  flex-wrap:wrap; 
+}
+
+.flex .chart-container1 {
+  flex: 1 1 48%;
+  min-width: 300px;
+  height: 300px; 
+  background:white;
+  padding:10px;
+  padding-bottom: 60px;
+  border-radius:12px;
+  box-shadow:0 4px 12px rgba(0,0,0,0.1);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.flex .chart-container1 canvas {
+  flex: 1;
+  width: 100% !important;
+  height: 100% !important;
+}
+
+table { 
+  width:100%; 
+  border-collapse: separate; 
+  border-spacing:0; 
+  border-radius:12px; 
+  overflow:hidden; 
+}
+
+th, td { 
+  padding:8px 12px; 
+  text-align:center;
+}
+
+th { 
+  background:#0077b6; 
+  color:white; 
+  font-weight:500;
+}
+
+td { 
+  background:#f9f9f9; 
+  transition:0.2s;
+}
+
+td:hover { 
+  background:#e0f0ff; 
+}
+
+select, input, button { 
+  padding:6px 10px; 
+  margin-right:10px; 
+  margin-bottom:10px; 
+  border-radius:6px; 
+  border:1px solid #ccc; 
+  font-size:14px;
+}
+
+button { 
+  background:#0077b6; 
+  color:white; 
+  border:none; 
+  cursor:pointer; 
+  transition:0.2s;
+}
+
+button:hover { 
+  background:#005f87; 
+}
+
+.badge { 
+  display:inline-block; 
+  padding:3px 7px; 
+  border-radius:8px; 
+  color:white; 
+  font-weight:500; 
+  font-size:12px; 
+}
+
+.badge-green{background:#28a745;} 
+.badge-yellow{background:#ffc107;} 
+.badge-red{background:#dc3545;}
+
+.table-container1 table tr:hover {
+  background-color: #e3f2fd;
+  transform: scale(1.01);
+  transition: all 0.2s ease;
+}
+
+.navbar {
+  background: #023e8a !important;
+}
+</style>
+</head>
+<body>
+  <nav class="navbar navbar-expand-lg navbar-dark bg-dark sticky-top">
+    <div class="container">
+        <a class="navbar-brand" href="index.html">🏙️ Explore Mumbai</a>
+        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="navbarNav">
+            <ul class="navbar-nav ms-auto">
+                <li class="nav-item"><a class="nav-link" href="index.html">Home</a></li>
+                <li class="nav-item"><a class="nav-link" href="places.html">Places</a></li>
+                <li class="nav-item"><a class="nav-link" href="food.html">Food</a></li>
+                <li class="nav-item"><a class="nav-link" href="itinerary.html">Itinerary</a></li>
+                <li class="nav-item"><a class="nav-link" href="hotel.html">Hotel</a></li>
+                <li class="nav-item"><a class="nav-link" href="weather.html">Weather</a></li>
+                <li class="nav-item"><a class="nav-link" href="feedback.html">Reviews</a></li>
+                
+                <li class="nav-item">
+                    <a id="dynamic-auth-button" class="nav-link btn btn-primary text-white ms-lg-2" href="login.html">Login</a>
+                </li>
+            </ul>
+        </div>
+    </div>
+</nav>
+
+<header>Mumbai Tourism - Feedback & Reviews</header>
+<div id="root" class="container1"></div>
+
+<script type="text/babel">
+const { useState, useEffect, useRef } = React;
+
+// Default reviews
+const defaultReviews = [
+  { user:'Ravi', itinerary:'Heritage Tour', rating:4.5, comment:'Loved the architecture!', criteria:{food:4, sightseeing:5, comfort:4, accessibility:5, nightlife:3} },
+  { user:'Neha', itinerary:'Beach Day', rating:4.0, comment:'Beautiful sunset.', criteria:{food:3, sightseeing:4, comfort:4, accessibility:4, nightlife:2} },
+  { user:'Sameer', itinerary:'Food Trail', rating:5.0, comment:'Amazing street food!', criteria:{food:5, sightseeing:4, comfort:4, accessibility:3, nightlife:3} },
+  { user:'Priya', itinerary:'Nightlife Tour', rating:4.2, comment:'Fun night!', criteria:{food:4, sightseeing:3, comfort:4, accessibility:4, nightlife:5} },
+  { user:'John', itinerary:'Shopping Spree', rating:4.8, comment:'Great finds!', criteria:{food:4, sightseeing:4, comfort:4, accessibility:5, nightlife:3} },
+  { user:'Aisha', itinerary:'Heritage Tour', rating:4.0, comment:'Crowded but worth it.', criteria:{food:3, sightseeing:5, comfort:3, accessibility:4, nightlife:2} },
+  { user:'Rahul', itinerary:'Food Trail', rating:4.5, comment:'Loved local dishes!', criteria:{food:5, sightseeing:4, comfort:4, accessibility:3, nightlife:3} },
+];
+
+const itineraries = [...new Set(defaultReviews.map(r=>r.itinerary))];
+
+function FeedbackDashboard() {
+  const [filter,setFilter] = useState('All');
+  const [searchTerm,setSearchTerm] = useState('');
+  const savedReviews = JSON.parse(localStorage.getItem('reviewsData')) || defaultReviews;
+  const [reviews,setReviews] = useState(savedReviews);
+
+  const radarRef = useRef(null);
+  const distRef = useRef(null);
+
+  const [formData,setFormData] = useState({
+    user:'',
+    itinerary:itineraries[0],
+    rating:5,
+    comment:'',
+    criteria:{food:5, sightseeing:5, comfort:5, accessibility:5, nightlife:5}
+  });
+
+  const filteredReviews = reviews.filter(r=>{
+    const matchesItinerary = filter==='All' || r.itinerary===filter;
+    const matchesSearch = r.user.toLowerCase().includes(searchTerm.toLowerCase()) ||
+                          r.comment.toLowerCase().includes(searchTerm.toLowerCase());
+    return matchesItinerary && matchesSearch;
+  });
+
+  const avgRating = filteredReviews.length>0 ? 
+    (filteredReviews.reduce((sum,r)=>sum+r.rating,0)/filteredReviews.length).toFixed(2) : 0;
+
+  const handleSubmit = e => {
+    e.preventDefault();
+    const updatedReviews = [...reviews, formData];
+    setReviews(updatedReviews);
+    localStorage.setItem('reviewsData', JSON.stringify(updatedReviews));
+    setFormData({
+      user:'',
+      itinerary:itineraries[0],
+      rating:5,
+      comment:'',
+      criteria:{food:5, sightseeing:5, comfort:5, accessibility:5, nightlife:5}
+    });
+  };
+
+  // Radar chart
+  useEffect(()=>{
+    if(!radarRef.current) return;
+    const ctx = radarRef.current.getContext('2d');
+    let criteriaAvg = {food:0, sightseeing:0, comfort:0, accessibility:0, nightlife:0};
+    filteredReviews.forEach(r=>{ Object.keys(criteriaAvg).forEach(k=>criteriaAvg[k]+=r.criteria[k]); });
+    Object.keys(criteriaAvg).forEach(k=>criteriaAvg[k]=filteredReviews.length>0?criteriaAvg[k]/filteredReviews.length:0);
+
+    if(window.radarChart) window.radarChart.destroy();
+    window.radarChart = new Chart(ctx,{
+      type:'radar',
+      data:{
+        labels:['Food','Sightseeing','Comfort','Accessibility','Nightlife'],
+        datasets:[{
+          label:'Average Ratings',
+          data:Object.values(criteriaAvg),
+          backgroundColor:'rgba(0,119,182,0.2)',
+          borderColor:'rgba(0,119,182,1)',
+          borderWidth:2,
+          pointBackgroundColor:'rgba(0,119,182,1)'
+        }]
+      },
+      options:{
+        responsive:true,
+        maintainAspectRatio:false,
+        scales:{
+          r:{
+            beginAtZero:true,
+            max:5,
+            ticks:{ stepSize:1 },
+            pointLabels:{ font:{ size:12 }, color:'#000' },
+            angleLines:{ color:'#ccc' },
+            grid:{ color:'#ccc' }
+          }
+        },
+        plugins:{
+          legend:{ position:'top' },
+          title:{ display:true, text:'Average Criteria Ratings' }
+        }
+      }
+    });
+  },[filter,searchTerm,reviews]);
+
+  // Rating distribution chart
+  useEffect(()=>{
+    if(!distRef.current) return;
+    const ctx = distRef.current.getContext('2d');
+    const dist = [5,4,3,2,1].map(star=>filteredReviews.filter(r=>Math.round(r.rating)===star).length);
+    if(window.distChart) window.distChart.destroy();
+    window.distChart = new Chart(ctx,{
+      type:'bar',
+      data:{
+        labels:['5★','4★','3★','2★','1★'],
+        datasets:[{
+          label:'Number of Reviews',
+          data:dist,
+          backgroundColor:'rgba(0,119,182,0.7)',
+          borderColor:'rgba(0,119,182,1)',
+          borderWidth:1,
+          borderRadius:5
+        }]
+      },
+      options:{
+        responsive:true,
+        maintainAspectRatio:false,
+        scales:{
+          x:{
+            title:{ display:true, text:'Rating (Stars)', color:'#000' },
+            ticks:{ color:'#000' },
+            grid:{ display:false }
+          },
+          y:{
+            beginAtZero:true,
+            title:{ display:true, text:'Number of Reviews', color:'#000' },
+            ticks:{ stepSize:1, color:'#000' }
+          }
+        },
+        plugins:{
+          legend:{ display:false },
+          title:{ display:true, text:'Rating Distribution' }
+        }
+      }
+    });
+  },[filter,searchTerm,reviews]);
+
+  const getBadgeClass = rating=> rating>=4.5 ? 'badge badge-green' : rating>=4 ? 'badge badge-yellow' : 'badge badge-red';
+
+  return (
+    <div>
+      <div className="form-container1">
+        <h2>Add Feedback</h2>
+        <form onSubmit={handleSubmit}>
+          <input type="text" placeholder="Your Name" required
+            value={formData.user} onChange={e=>setFormData({...formData,user:e.target.value})} />
+          <select value={formData.itinerary} onChange={e=>setFormData({...formData,itinerary:e.target.value})}>
+            {itineraries.map(it=><option key={it}>{it}</option>)}
+          </select>
+          <input type="number" min="1" max="5" step="0.1" value={formData.rating}
+            onChange={e=>setFormData({...formData,rating:parseFloat(e.target.value)})} />
+          <input type="text" placeholder="Comment" required
+            value={formData.comment} onChange={e=>setFormData({...formData,comment:e.target.value})} />
+          <button type="submit">Submit</button>
+        </form>
+      </div>
+
+      <p style={{margin:'15px 0'}}>Average Rating: <strong>{avgRating} / 5</strong> ({filteredReviews.length} reviews)</p>
+
+      <select value={filter} onChange={e=>setFilter(e.target.value)}>
+        <option value="All">All Itineraries</option>
+        {itineraries.map(it=><option key={it}>{it}</option>)}
+      </select>
+      <input type="text" placeholder="Search reviews..." value={searchTerm} onChange={e=>setSearchTerm(e.target.value)} />
+
+      <div className="flex">
+        <div className="chart-container1"><h2 style={{fontSize:'16px'}}>Average Ratings (Radar)</h2><canvas ref={radarRef}></canvas></div>
+        <div className="chart-container1"><h2 style={{fontSize:'16px'}}>Rating Distribution</h2><canvas ref={distRef}></canvas></div>
+      </div>
+
+      <div className="table-container1">
+        <h2>User Reviews</h2>
+        <table>
+          <thead><tr><th>User</th><th>Itinerary</th><th>Rating</th><th>Comment</th></tr></thead>
+          <tbody>
+            {filteredReviews.map((r,i)=>(
+              <tr key={i}>
+                <td>{r.user}</td>
+                <td>{r.itinerary}</td>
+                <td><span className={getBadgeClass(r.rating)}>{r.rating}</span></td>
+                <td>{r.comment}</td>
+              </tr>
+            ))}
+          </tbody>
+        </table>
+      </div>
+    </div>
+  );
+}
+
+ReactDOM.createRoot(document.getElementById('root')).render(<FeedbackDashboard />);
+</script>
+   <footer class="bg-dark text-white text-center py-4">
+        <p class="mb-0">© 2025 Explore Mumbai | All Rights Reserved</p>
+    </footer>
+
+</body>
+</html>
