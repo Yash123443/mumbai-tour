@@ -41,6 +41,10 @@ body {
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
 }
 
+body .navbar {
+  background: linear-gradient(105deg, #082f49, #075985 58%, #0f766e) !important;
+}
+
 /* Brand / Logo */
 .navbar-brand {
   font-weight: 700;
@@ -207,6 +211,49 @@ footer p {
   margin: 0;
 }
 
+/* Small shared polish for cards, controls, and keyboard navigation. */
+html {
+  scroll-behavior: smooth;
+}
+
+.card,
+.location-card,
+.restaurant-card,
+.cafe-card,
+.place-card,
+.hotel-card {
+  border: 1px solid rgba(2, 62, 138, 0.08);
+  box-shadow: 0 8px 22px rgba(2, 48, 71, 0.09);
+}
+
+.card:hover,
+.location-card:hover,
+.restaurant-card:hover,
+.cafe-card:hover,
+.hotel-card:hover {
+  box-shadow: 0 14px 30px rgba(2, 48, 71, 0.15);
+}
+
+:focus-visible {
+  outline: 3px solid #f4b942;
+  outline-offset: 3px;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  html {
+    scroll-behavior: auto;
+  }
+
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    scroll-behavior: auto !important;
+    transition-duration: 0.01ms !important;
+  }
+}
+
 
 
 /* ================================
@@ -216,4 +263,373 @@ footer p {
 .mt-2 { margin-top: 0.5rem; }
 .mt-3 { margin-top: 1rem; }
 .mt-4 { margin-top: 1.5rem; }
+
+/* Visible refresh: a brighter coastal palette with clearer depth and spacing. */
+:root {
+  --primary-color: #075985;
+  --primary-light: #0f9f9a;
+  --accent-color: #f6bd60;
+  --bg-color: #edf6f8;
+  --card-tint: #f2fbfb;
+  --text-color: #183247;
+  --footer-bg: #082f49;
+}
+
+body {
+  background-color: #edf6f8;
+  background-image: radial-gradient(ellipse at top left, rgba(14, 165, 164, 0.10), transparent 38%),
+                    radial-gradient(ellipse at bottom right, rgba(246, 189, 96, 0.13), transparent 32%);
+  background-attachment: fixed;
+  color: #183247;
+}
+
+.navbar {
+  background: linear-gradient(105deg, #082f49, #075985 58%, #0f766e) !important;
+  min-height: 72px;
+  box-shadow: 0 8px 24px rgba(8, 47, 73, 0.2);
+}
+
+.navbar-brand {
+  letter-spacing: 0.07em;
+}
+
+.navbar .nav-link {
+  border-radius: 999px;
+  padding: 0.55rem 0.9rem !important;
+  margin: 0 0.12rem;
+}
+
+.navbar .nav-link:hover,
+.navbar .nav-link:focus-visible {
+  color: #fff !important;
+  background: rgba(255, 255, 255, 0.12);
+}
+
+.navbar .nav-link.active {
+  color: #fff !important;
+  background: rgba(255, 255, 255, 0.16);
+}
+
+.hero-section {
+  min-height: 78vh;
+  height: auto;
+  padding: 5rem 1.5rem;
+  background-position: center 42%;
+}
+
+.hero-section > div {
+  max-width: 780px;
+  padding: clamp(1.5rem, 5vw, 3.5rem);
+  border: 1px solid rgba(255, 255, 255, 0.24);
+  border-radius: 28px;
+  background: rgba(8, 47, 73, 0.3);
+  backdrop-filter: blur(4px);
+}
+
+.hero-section h1 {
+  color: #fff;
+  font-size: clamp(2.6rem, 7vw, 5rem);
+  line-height: 1.05;
+}
+
+.hero-section p {
+  color: rgba(255, 255, 255, 0.92);
+}
+
+.page-header {
+  min-height: 320px;
+  height: 38vh;
+  padding: 3rem 1rem;
+  background-position: center 42%;
+}
+
+.page-header h1 {
+  color: #fff;
+  text-align: center;
+  text-wrap: balance;
+  font-size: clamp(2.25rem, 5vw, 3.6rem);
+}
+
+.content-section {
+  padding-top: clamp(2.5rem, 6vw, 4.5rem);
+  padding-bottom: clamp(2.5rem, 6vw, 4.5rem);
+}
+
+.section-title {
+  color: #075985;
+  letter-spacing: 0.075em;
+}
+
+.card,
+.location-card,
+.restaurant-card,
+.cafe-card,
+.place-card,
+.hotel-card,
+.booking-container,
+.suggest-section {
+  border: 1px solid rgba(7, 89, 133, 0.1);
+  box-shadow: 0 12px 30px rgba(8, 47, 73, 0.1);
+}
+
+.card,
+.restaurant-card,
+.cafe-card,
+.hotel-card {
+  border-radius: 20px;
+}
+
+.card:hover,
+.restaurant-card:hover,
+.cafe-card:hover,
+.hotel-card:hover {
+  transform: translateY(-7px);
+  box-shadow: 0 20px 38px rgba(8, 47, 73, 0.17);
+}
+
+.location-card {
+  position: relative;
+  overflow: hidden;
+  background: rgba(255, 255, 255, 0.94);
+  border-radius: 22px;
+  padding: clamp(1.25rem, 3vw, 2.25rem);
+}
+
+.location-title {
+  color: #075985;
+  border-bottom-color: #f6bd60;
+}
+
+.restaurant-card,
+.cafe-card {
+  background: #fff;
+}
+
+.restaurant-image,
+.cafe-image {
+  height: 215px;
+  transition: transform 350ms ease;
+}
+
+.restaurant-card:hover .restaurant-image,
+.cafe-card:hover .cafe-image {
+  transform: scale(1.035);
+}
+
+button,
+.btn {
+  border-radius: 999px;
+  font-weight: 600;
+  box-shadow: 0 5px 12px rgba(7, 89, 133, 0.16);
+}
+
+.btn-primary,
+button {
+  background-color: #0f766e;
+}
+
+.btn-primary:hover,
+button:hover {
+  background-color: #115e59;
+}
+
+footer {
+  background: linear-gradient(105deg, #082f49, #075985) !important;
+  padding-top: 1.6rem !important;
+  padding-bottom: 1.6rem !important;
+}
+
+@media (max-width: 768px) {
+  .navbar .nav-link {
+    margin: 0.12rem 0;
+  }
+
+  .hero-section {
+    min-height: 68vh;
+  }
+
+  .page-header {
+    min-height: 260px;
+    height: 32vh;
+  }
+
+  .restaurants-container,
+  .cafes-container {
+    gap: 16px;
+  }
+
+  .restaurant-card,
+  .cafe-card {
+    width: min(100%, 420px);
+  }
+}
+
+/* Consistent form and dashboard styling for the standalone pages. */
+.form-control,
+.form-select,
+input:not([type="checkbox"]):not([type="radio"]),
+select,
+textarea {
+  border-color: #cbdde5;
+  border-radius: 12px;
+}
+
+.form-control:focus,
+.form-select:focus,
+input:focus,
+select:focus,
+textarea:focus {
+  border-color: #0f9f9a;
+  box-shadow: 0 0 0 0.22rem rgba(15, 159, 154, 0.16);
+}
+
+body .auth-card,
+body .booking-container,
+body .form-container1,
+body .table-container1,
+body .chart-container1,
+body .suggest-section {
+  border: 1px solid rgba(7, 89, 133, 0.11);
+  border-radius: 22px;
+  box-shadow: 0 16px 38px rgba(8, 47, 73, 0.12);
+}
+
+body .auth-card,
+body .booking-container {
+  background: rgba(255, 255, 255, 0.96);
+  padding: clamp(1.5rem, 4vw, 2.5rem);
+}
+
+body .auth-card h2,
+body .booking-container h2,
+body .form-container1 h2,
+body .table-container1 h2,
+body .chart-container1 h2 {
+  color: #075985;
+}
+
+.search-filter {
+  background: linear-gradient(105deg, #0c7182, #0f9f9a) !important;
+  padding: 22px 18px;
+}
+
+.search-filter input,
+.search-filter select {
+  min-height: 46px;
+  border: 1px solid rgba(255, 255, 255, 0.6);
+  box-shadow: 0 5px 15px rgba(8, 47, 73, 0.12);
+}
+
+.hotel-card {
+  overflow: hidden;
+  background: #fff;
+  border-radius: 20px;
+}
+
+.hotel-card img {
+  transition: transform 350ms ease;
+}
+
+.hotel-card:hover img {
+  transform: scale(1.035);
+}
+
+.options label,
+.days-badge,
+.location-list li {
+  border: 1px solid rgba(7, 89, 133, 0.1);
+  border-radius: 14px;
+}
+
+.place-card {
+  background: linear-gradient(110deg, #fff 0%, #f3fbfc 100%);
+  border-radius: 22px;
+}
+
+.place-card:hover {
+  transform: translateY(-5px);
+}
+
+.suggest-section {
+  background: rgba(255, 255, 255, 0.9) !important;
+}
+
+body .table-container1 {
+  overflow-x: auto;
+  background: rgba(255, 255, 255, 0.96);
+}
+
+body .table-container1 table th {
+  background: #075985;
+}
+
+body .table-container1 table tr:nth-child(even) td {
+  background: #f2f8fa;
+}
+
+body .chart-container1,
+body .form-container1 {
+  background: rgba(255, 255, 255, 0.96);
+}
+
+.weather-shell {
+  margin-bottom: 5rem;
+}
+
+@media (max-width: 600px) {
+  body .booking-container,
+  body .auth-card,
+  body .form-container1,
+  body .table-container1,
+  body .chart-container1,
+  body .suggest-section {
+    border-radius: 17px;
+  }
+
+  .location-title {
+    font-size: 1.65rem;
+  }
+
+  .hotel-card {
+    margin-inline: 12px;
+  }
+}
+
+/* Keep page-specific inline styles inside the refreshed site palette. */
+body:has(.content-section),
+body:has(.auth-card),
+body:has(.booking-container),
+body.itinerary-body,
+body:has(.search-filter),
+body:has(#root),
+body:has(.weather-shell) {
+  color: #183247;
+  background-color: #edf6f8;
+  background-image: radial-gradient(ellipse at top left, rgba(14, 165, 164, 0.10), transparent 38%),
+                    radial-gradient(ellipse at bottom right, rgba(246, 189, 96, 0.13), transparent 32%);
+  background-attachment: fixed;
+}
+
+body:has(.auth-card),
+body:has(.booking-container) {
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+}
+
+body:has(.auth-card) .auth-card,
+body:has(.booking-container) .booking-container {
+  margin-top: auto;
+  margin-bottom: auto;
+}
+
+body:has(#root) .navbar {
+  background: linear-gradient(105deg, #082f49, #075985 58%, #0f766e) !important;
+}
+
+body.feedback-body > header {
+  background: linear-gradient(105deg, #0c7182, #0f9f9a) !important;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.35);
+  box-shadow: 0 8px 24px rgba(8, 47, 73, 0.14);
+}
 

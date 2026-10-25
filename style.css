@@ -169,7 +169,7 @@ url("city of dream.jpeg") center/cover no-repeat;
 /* --- From feedback.html --- */
 .feedback-body { font-family: 'Poppins', sans-serif; background:#f2f2f2; margin:0; padding:0;}
 .feedback-body header { background:#0077b6; color:white; padding:18px; text-align:center; font-size:24px; font-weight:600; }
-.feedback-body .container { max-width:1000px; margin:auto; padding:15px; }
+.feedback-body .container1 { max-width:1000px; margin:auto; padding:15px; }
 .feedback-body h2 { color:#023e8a; margin:20px 0 10px 0; font-size:20px; }
 .feedback-body .chart-container, .feedback-body .table-container, .feedback-body .form-container { background:white; padding:15px; border-radius:12px; margin-top:15px; box-shadow:0 4px 12px rgba(0,0,0,0.1);}
 .feedback-body .flex { display:flex; gap:15px; flex-wrap:wrap; }
