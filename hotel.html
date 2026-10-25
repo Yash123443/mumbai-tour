@@ -246,7 +246,7 @@ function displayHotels(list) {
             <p>${hotel.desc}</p>
             <p class="rating">⭐ ${hotel.rating} Star</p>
             <p class="price">${hotel.price}</p>
-            <a href="hotelbook.html?hotel=${encodeURIComponent(hotel.name)}&days=${selectedDays}">
+            <a href="hotelbook.html?name=${encodeURIComponent(hotel.name)}&price=${encodeURIComponent(hotel.price.replace(/[^0-9]/g, ''))}&days=${selectedDays}">
               <button class="book-btn">Book for ${selectedDays} Day${selectedDays > 1 ? 's' : ''}</button>
             </a>
           </div>

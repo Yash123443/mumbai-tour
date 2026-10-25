@@ -169,10 +169,10 @@ footer {
   <h2 class="section-title mb-3">Discover Mumbai's Landmarks</h2>
 
   <div class="btn-group w-100 mb-2" role="group" aria-label="Category Filter">
-    <button type="button" class="btn btn-primary active" onclick="filterPlaces('all')">All</button>
-    <button type="button" class="btn btn-primary" onclick="filterPlaces('fun')">Fun & Travel</button>
-    <button type="button" class="btn btn-primary" onclick="filterPlaces('shopping')">Shopping</button>
-    <button type="button" class="btn btn-primary" onclick="filterPlaces('culture')">Culture</button>
+    <button type="button" class="btn btn-primary active" data-category="all" onclick="filterPlaces('all', event)">All</button>
+    <button type="button" class="btn btn-primary" data-category="fun" onclick="filterPlaces('fun', event)">Fun & Travel</button>
+    <button type="button" class="btn btn-primary" data-category="shopping" onclick="filterPlaces('shopping', event)">Shopping</button>
+    <button type="button" class="btn btn-primary" data-category="culture" onclick="filterPlaces('culture', event)">Culture</button>
   </div>
 
   <div class="scroll-container mt-0" id="places-container"></div>
@@ -261,10 +261,10 @@ function renderPlaces(list) {
 }
 
 // --- FILTER FUNCTION ---
-function filterPlaces(category) {
+function filterPlaces(category, event) {
   const buttons = document.querySelectorAll('.btn-group .btn');
   buttons.forEach(btn => btn.classList.remove('active'));
-  event.target.classList.add('active');
+  event.currentTarget.classList.add('active');
 
   if(category === 'all') renderPlaces(places);
   else renderPlaces(places.filter(p => p.category === category));
@@ -280,11 +280,18 @@ document.getElementById('suggest-form').addEventListener('submit', function(e){
   const location = document.getElementById('placeLocation').value;
   const info = document.getElementById('placeInfo').value;
 
-  const newPlace = { name, category: 'suggested', image: 'https://via.placeholder.com/400x250', info };
+  const newPlace = { name, category: 'suggested', image: 'Places Taskbar.jpg', info: `${info} (Suggested location: ${location})` };
   places.push(newPlace);
+  try {
+    const suggestions = JSON.parse(sessionStorage.getItem('mumbaiPlaceSuggestions') || '[]');
+    suggestions.push(newPlace);
+    sessionStorage.setItem('mumbaiPlaceSuggestions', JSON.stringify(suggestions));
+  } catch (error) {
+    console.warn('Could not save this suggestion for the current tab.', error);
+  }
   renderPlaces(places);
   this.reset();
-  alert('Thank you for your suggestion!');
+  alert('Thanks! Your suggestion is shown for this browser tab only; it has not been sent to an admin.');
 });
 </script>
 
